@@ -1,75 +1,26 @@
-# Nuxt 3 Minimal Starter
+# Nuxt-Auth-Lucia
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This repo is based on [Pilcrow](https://github.com/pilcrowOnPaper/astro-email-password-webauthn) example but with Nuxt and Prisma. (WIP)
 
-## Setup
+The goal is to implement the following:
 
-Make sure to install the dependencies:
+- Password checks with HaveIBeenPwned
+- Sign in with passkeys
+- Email verification
+- 2FA with TOTP
+- 2FA recovery codes
+- 2FA with passkeys and security keys
+- Password reset with 2FA
+- Login throttling and rate limiting
 
-```bash
-# npm
-npm install
+## Initialize project
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+pnpm i
+npx prisma migrate dev --name init
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+### Nuxt 4?
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+I'm waiting for the mighty release to drop :D
