@@ -32,8 +32,6 @@ export default eventHandler(async (event) => {
 		outputLen: 32,
 		parallelism: 1
 	});
-	const userId = generateIdFromEntropySize(10); // 16 characters long
-
 	const existingUser = await prisma.user.findFirst({
 		where: {
 			username: {
@@ -48,15 +46,14 @@ export default eventHandler(async (event) => {
 		});
 	}
 
-	await db.user.create({
+	const user = await db.user.create({
 		data: {
-			id: userId,
 			username: username,
 			password_hash: passwordHash,
 			email: "test"
 		}
 	})
 
-	const session = await lucia.createSession(userId, {});
+	const session = await lucia.createSession(user.id, {});
 	appendHeader(event, "Set-Cookie", lucia.createSessionCookie(session.id).serialize());
 });

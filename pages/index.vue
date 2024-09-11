@@ -14,4 +14,6 @@ async function logout() {
   <form @submit.prevent="logout">
     <button>Sign out</button>
   </form>
+  <NuxtLink to="/signup">Register</NuxtLink>
+  <NuxtLink to="/login">Login</NuxtLink>
 </template>

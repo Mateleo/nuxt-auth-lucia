@@ -20,4 +20,6 @@ async function signup(e: Event) {
 		<br />
 		<button>Continue</button>
 	</form>
+	<NuxtLink to="/">Home</NuxtLink>
+
 </template>
