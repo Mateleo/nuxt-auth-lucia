@@ -25,6 +25,15 @@ export default eventHandler(async (event) => {
 		});
 	}
 
+	// Check if the password has been compromised
+	const isCompromised = await checkPasswordCompromised(password);
+	if (isCompromised) {
+		throw createError({
+			statusMessage: "Password has been compromised in a data breach. Please choose another one.",
+			statusCode: 400
+		});
+	}
+
 	const passwordHash = await hash(password, {
 		// recommended minimum parameters
 		memoryCost: 19456,
@@ -47,14 +56,14 @@ export default eventHandler(async (event) => {
 	}
 
 		
-	// Check if the password has been compromised
-	const isCompromised = await checkPasswordCompromised(password);
-	if (isCompromised) {
-		throw createError({
-			statusMessage: "Password has been compromised in a data breach. Please choose another one.",
-			statusCode: 400
-		});
-	}
+	// // Check if the password has been compromised
+	// const isCompromised = await checkPasswordCompromised(password);
+	// if (isCompromised) {
+	// 	throw createError({
+	// 		statusMessage: "Password has been compromised in a data breach. Please choose another one.",
+	// 		statusCode: 400
+	// 	});
+	// }
 
 	const user = await db.user.create({
 		data: {
@@ -72,6 +81,7 @@ export default eventHandler(async (event) => {
 async function checkPasswordCompromised(password: string) {
 	// Hash the password using SHA-1
 	const sha1Hash = crypto.createHash('sha1').update(password).digest('hex').toUpperCase();
+	console.log(sha1Hash)
 
 	// Get the first 5 characters of the hashed password
 	const prefix = sha1Hash.substring(0, 5);
