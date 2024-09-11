@@ -1,6 +1,6 @@
 // server/api/login.post.ts
 import { verify } from "@node-rs/argon2";
-import db from "~/server/utils/prisma";
+import { db } from "~/server/utils/prisma";
 
 export default eventHandler(async (event) => {
     const formData = await readFormData(event);
@@ -26,7 +26,7 @@ export default eventHandler(async (event) => {
 
     const existingUser = await db.user.findUnique({
         where: {
-            username:username
+            username: username
         }
     });
     if (!existingUser) {

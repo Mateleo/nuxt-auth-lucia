@@ -1,7 +1,7 @@
 // server/api/auth/signup.post.ts
 import { hash } from "@node-rs/argon2";
 import crypto from "crypto"; // To use SHA-1 for hashing
-import db from "~/server/utils/prisma";
+import { db } from "~/server/utils/prisma";
 
 export default eventHandler(async (event) => {
 	const formData = await readFormData(event);

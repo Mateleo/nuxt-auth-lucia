@@ -11,12 +11,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  username      String    @unique
-  email         String    @unique
-  verified      Boolean   @default(false)
-  password_hash String
-  sessions      Session[]
+  id                String             @id @default(cuid())
+  username          String             @unique
+  email             String             @unique
+  verified          Boolean            @default(false)
+  password_hash     String
+  sessions          Session[]
+  VerificationEmail VerificationEmail?
+}
+
+model VerificationEmail {
+  id                      String    @id @default(cuid())
+  userId                  String    @unique
+  verificationCode        String
+  verificationCodeExpires DateTime
+  verificationAttempts    Int       @default(0)
+  lastVerificationAttempt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
