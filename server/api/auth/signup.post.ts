@@ -1,6 +1,6 @@
 // server/api/auth/signup.post.ts
 import { hash } from "@node-rs/argon2";
-import { generateIdFromEntropySize } from "lucia";
+import crypto from "crypto"; // To use SHA-1 for hashing
 import db from "~/server/utils/prisma";
 
 export default eventHandler(async (event) => {
@@ -46,6 +46,16 @@ export default eventHandler(async (event) => {
 		});
 	}
 
+		
+	// Check if the password has been compromised
+	const isCompromised = await checkPasswordCompromised(password);
+	if (isCompromised) {
+		throw createError({
+			statusMessage: "Password has been compromised in a data breach. Please choose another one.",
+			statusCode: 400
+		});
+	}
+
 	const user = await db.user.create({
 		data: {
 			username: username,
@@ -57,3 +67,20 @@ export default eventHandler(async (event) => {
 	const session = await lucia.createSession(user.id, {});
 	appendHeader(event, "Set-Cookie", lucia.createSessionCookie(session.id).serialize());
 });
+
+// Helper function to check if the password has been compromised
+async function checkPasswordCompromised(password: string) {
+	// Hash the password using SHA-1
+	const sha1Hash = crypto.createHash('sha1').update(password).digest('hex').toUpperCase();
+
+	// Get the first 5 characters of the hashed password
+	const prefix = sha1Hash.substring(0, 5);
+	const suffix = sha1Hash.substring(5);
+
+	// Call the Have I Been Pwned API
+	const response = await $fetch<string>(`https://api.pwnedpasswords.com/range/${prefix}`);
+
+	// Check if the suffix is in the list of compromised passwords
+	const matches = response.split("\n").map(line => line.split(":")[0]);
+	return matches.includes(suffix);
+}
