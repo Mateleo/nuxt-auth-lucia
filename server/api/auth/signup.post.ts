@@ -25,14 +25,8 @@ export default eventHandler(async (event) => {
 		});
 	}
 
-	// Check if the password has been compromised
-	const isCompromised = await checkPasswordCompromised(password);
-	if (isCompromised) {
-		throw createError({
-			statusMessage: "Password has been compromised in a data breach. Please choose another one.",
-			statusCode: 400
-		});
-	}
+	// It's better to check if the password has been compromised here.
+	// But UX wise it's not
 
 	const passwordHash = await hash(password, {
 		// recommended minimum parameters
@@ -56,14 +50,14 @@ export default eventHandler(async (event) => {
 	}
 
 		
-	// // Check if the password has been compromised
-	// const isCompromised = await checkPasswordCompromised(password);
-	// if (isCompromised) {
-	// 	throw createError({
-	// 		statusMessage: "Password has been compromised in a data breach. Please choose another one.",
-	// 		statusCode: 400
-	// 	});
-	// }
+	// Check if the password has been compromised
+	const isCompromised = await checkPasswordCompromised(password);
+	if (isCompromised) {
+		throw createError({
+			statusMessage: "Password has been compromised in a data breach. Please choose another one.",
+			statusCode: 400
+		});
+	}
 
 	const user = await db.user.create({
 		data: {
@@ -77,7 +71,6 @@ export default eventHandler(async (event) => {
 	appendHeader(event, "Set-Cookie", lucia.createSessionCookie(session.id).serialize());
 });
 
-// Helper function to check if the password has been compromised
 async function checkPasswordCompromised(password: string) {
 	// Hash the password using SHA-1
 	const sha1Hash = crypto.createHash('sha1').update(password).digest('hex').toUpperCase();
