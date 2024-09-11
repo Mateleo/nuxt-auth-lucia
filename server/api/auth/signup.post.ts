@@ -25,6 +25,17 @@ export default eventHandler(async (event) => {
 		});
 	}
 
+	const email = formData.get("email");
+	const isValidEmail = typeof email === "string" && email.length <= 255 && /^.+@.+\..+$/.test(email);
+	
+	if (!isValidEmail) {
+		throw createError({
+			statusMessage: "Invalid email",
+			statusCode: 400
+		});
+	}
+	
+
 	// It's better to check if the password has been compromised here.
 	// But UX wise it's not
 
@@ -49,7 +60,7 @@ export default eventHandler(async (event) => {
 		});
 	}
 
-		
+
 	// Check if the password has been compromised
 	const isCompromised = await checkPasswordCompromised(password);
 	if (isCompromised) {
@@ -63,7 +74,7 @@ export default eventHandler(async (event) => {
 		data: {
 			username: username,
 			password_hash: passwordHash,
-			email: "test"
+			email: email
 		}
 	})
 
@@ -71,10 +82,9 @@ export default eventHandler(async (event) => {
 	appendHeader(event, "Set-Cookie", lucia.createSessionCookie(session.id).serialize());
 });
 
-async function checkPasswordCompromised(password: string) {
+async function checkPasswordCompromised(password: string): Promise<boolean> {
 	// Hash the password using SHA-1
 	const sha1Hash = crypto.createHash('sha1').update(password).digest('hex').toUpperCase();
-	console.log(sha1Hash)
 
 	// Get the first 5 characters of the hashed password
 	const prefix = sha1Hash.substring(0, 5);

@@ -4,7 +4,7 @@ This repo is based on [Pilcrow](https://github.com/pilcrowOnPaper/astro-email-pa
 
 The goal is to implement the following:
 
-- Password checks with HaveIBeenPwned
+- Password checks with HaveIBeenPwned ✅
 - Sign in with passkeys
 - Email verification
 - 2FA with TOTP

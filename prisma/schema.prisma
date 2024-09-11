@@ -14,6 +14,7 @@ model User {
   id            String    @id @default(cuid())
   username      String    @unique
   email         String    @unique
+  verified      Boolean   @default(false)
   password_hash String
   sessions      Session[]
 }
