@@ -1,8 +1,8 @@
 import { generateRandomInteger } from 'oslo/crypto'
 import { db } from './prisma'
 
-const VERIFICATION_CODE_LENGTH = 10
-const VERIFICATION_CODE_EXPIRY = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+const VERIFICATION_CODE_LENGTH = 6
+const VERIFICATION_CODE_EXPIRY = 60 * 60 * 1000 // 1 hours in milliseconds
 const MAX_VERIFICATION_ATTEMPTS = 10
 
 // function generateVerificationCode(): string {
@@ -40,7 +40,7 @@ export async function sendVerificationEmail(userId: string): Promise<string> {
     const verificationCodeExpires = new Date(Date.now() + VERIFICATION_CODE_EXPIRY)
 
     await db.verificationEmail.upsert({
-        where: { id: user.VerificationEmail?.id },
+        where: { id: user.VerificationEmail?.id ?? "undefined" },
         create: {
             userId: userId,
             verificationCode: verificationCode,
@@ -105,6 +105,7 @@ export async function verifyEmail(userId: string, code: string): Promise<boolean
     }
 
     if (user.VerificationEmail.verificationCode !== code) {
+        console.log("The code is wrong!")
         return false
     }
 

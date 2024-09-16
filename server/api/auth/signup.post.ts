@@ -34,6 +34,20 @@ export default eventHandler(async (event) => {
 			statusCode: 400
 		});
 	}
+
+	const existingEmail = await db.user.findFirst({
+		where: {
+			email: {
+				contains: email,
+			},
+		},
+	});
+	if (existingEmail) {
+		throw createError({
+			statusMessage: "Email already in use",
+			statusCode: 400
+		});
+	}
 	
 
 	// It's better to check if the password has been compromised here.
@@ -46,7 +60,7 @@ export default eventHandler(async (event) => {
 		outputLen: 32,
 		parallelism: 1
 	});
-	const existingUser = await prisma.user.findFirst({
+	const existingUser = await db.user.findFirst({
 		where: {
 			username: {
 				contains: username,
