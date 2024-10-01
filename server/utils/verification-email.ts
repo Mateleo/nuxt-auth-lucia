@@ -12,7 +12,7 @@ const MAX_VERIFICATION_ATTEMPTS = 10
 //     return recoveryCode;
 // }
 
-function generateVerificationCode(VERIFICATION_CODE_LENGTH: number): string {
+export function generateVerificationCode(VERIFICATION_CODE_LENGTH: number): string {
     const characters = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
     let result = '';
     for (let i = 0; i < VERIFICATION_CODE_LENGTH; i++) {

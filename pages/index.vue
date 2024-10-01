@@ -16,4 +16,5 @@ async function logout() {
   </form>
   <NuxtLink to="/signup">Register</NuxtLink>
   <NuxtLink to="/login">Login</NuxtLink>
+  <NuxtLink to="/reset-password">Reset</NuxtLink>
 </template>

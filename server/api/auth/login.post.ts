@@ -57,7 +57,6 @@ export default eventHandler(async (event) => {
             statusCode: 400
         });
     }
-
     const session = await lucia.createSession(existingUser.id, {});
     appendHeader(event, "Set-Cookie", lucia.createSessionCookie(session.id).serialize());
 });

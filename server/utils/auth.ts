@@ -23,6 +23,11 @@ export const lucia = new Lucia(adapter, {
             verified: attributes.verified,
             email: attributes.email,
         };
+    },
+    getSessionAttributes: (attributes) =>{
+        return {
+            resetPassword:attributes.resetPassword
+        }
     }
 });
 
@@ -30,5 +35,9 @@ declare module "lucia" {
     interface Register {
         Lucia: typeof lucia;
         DatabaseUserAttributes: User;
+        DatabaseSessionAttributes: DatabaseSessionAttributes;
     }
+    interface DatabaseSessionAttributes {
+		resetPassword?: boolean;
+	}
 }

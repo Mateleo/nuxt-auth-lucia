@@ -20,4 +20,5 @@ async function login(e: Event) {
 		<br />
 		<button>Continue</button>
 	</form>
+	<NuxtLink to="/forgot-password">Forgot password?</NuxtLink>
 </template>

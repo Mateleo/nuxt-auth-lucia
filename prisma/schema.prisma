@@ -18,6 +18,7 @@ model User {
   password_hash     String
   sessions          Session[]
   VerificationEmail VerificationEmail?
+  PasswordReset     PasswordReset?
 }
 
 model VerificationEmail {
@@ -31,10 +32,21 @@ model VerificationEmail {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Session {
-  id        String   @id
-  userId    String
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  token     String   @unique
   expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id            String   @id
+  userId        String
+  expiresAt     DateTime
+  resetPassword Boolean  @default(false)
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }

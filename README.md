@@ -6,7 +6,7 @@ The goal is to implement the following:
 
 - Password checks with HaveIBeenPwned ✅
 - Sign in with passkeys
-- Email verification
+- Email verification ✅
 - 2FA with TOTP
 - 2FA recovery codes
 - 2FA with passkeys and security keys
