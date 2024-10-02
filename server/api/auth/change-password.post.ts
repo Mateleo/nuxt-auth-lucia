@@ -4,31 +4,16 @@ import { db } from "~/server/utils/prisma";
 
 export default defineEventHandler(async (event) => {
     const formData = await readFormData(event);
-    const username = formData.get("username");
-    if (
-        typeof username !== "string" ||
-        username.length < 3 ||
-        username.length > 31 ||
-        !/^[a-zA-Z0-9_-]+$/.test(username)
-    ) {
-        throw createError({
-            statusMessage: "Invalid username",
-            statusCode: 400
-        });
-    }
-    const password = formData.get("password");
-    if (typeof password !== "string" || password.length < 8 || password.length > 255) {
-        throw createError({
-            statusMessage: "Invalid password",
-            statusCode: 400
-        });
-    }
+    const session = event.context.session
+
+    console.log(formData)
 
     const existingUser = await db.user.findUnique({
         where: {
-            username: username
+            id:session?.userId
         }
     });
+
     if (!existingUser) {
         // NOTE:
         // Returning immediately allows malicious actors to figure out valid usernames from response times,
@@ -40,7 +25,16 @@ export default defineEventHandler(async (event) => {
         // it is crucial your implementation is protected against brute-force attacks with login throttling etc.
         // If usernames are public, you may outright tell the user that the username is invalid.
         throw createError({
-            statusMessage: "Incorrect username or password",
+            statusMessage: "User not found",
+            statusCode: 400
+        });
+    }
+
+
+    const password = formData.get("password");
+    if (typeof password !== "string" || password.length < 8 || password.length > 255) {
+        throw createError({
+            statusMessage: "Invalid password",
             statusCode: 400
         });
     }
@@ -57,6 +51,4 @@ export default defineEventHandler(async (event) => {
             statusCode: 400
         });
     }
-    const session = await lucia.createSession(existingUser.id, {});
-    appendHeader(event, "Set-Cookie", lucia.createSessionCookie(session.id).serialize());
 });
