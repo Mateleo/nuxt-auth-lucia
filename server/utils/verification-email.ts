@@ -1,5 +1,6 @@
 import { generateRandomInteger } from 'oslo/crypto'
 import { db } from './prisma'
+import { sendVerificationEmailWithNodemailer } from './email-service'
 
 const VERIFICATION_CODE_LENGTH = 6
 const VERIFICATION_CODE_EXPIRY = 60 * 60 * 1000 // 1 hours in milliseconds
@@ -60,6 +61,8 @@ export async function sendVerificationEmail(userId: string): Promise<string> {
 
     // TODO: Implement actual email sending
     console.log(`Verification code for ${user.email}: ${verificationCode}`)
+
+    await sendVerificationEmailWithNodemailer(user.email, verificationCode)
 
     return verificationCode
 }
