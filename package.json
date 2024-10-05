@@ -12,17 +12,17 @@
   "dependencies": {
     "@formkit/nuxt": "^1.6.7",
     "@lucia-auth/adapter-prisma": "^4.0.1",
-    "@node-rs/argon2": "^1.8.3",
-    "@prisma/client": "5.19.1",
+    "@node-rs/argon2": "^2.0.0",
+    "@prisma/client": "5.20.0",
     "lucia": "^3.2.0",
     "nuxt": "^3.13.2",
     "oslo": "^1.2.1",
-    "vue": "^3.5.7",
+    "vue": "^3.5.11",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
     "nuxt-cron": "^1.6.0",
-    "prisma": "^5.19.1"
+    "prisma": "^5.20.0"
   }
 }

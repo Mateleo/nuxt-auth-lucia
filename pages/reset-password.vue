@@ -5,13 +5,23 @@ definePageMeta({
 
 const user = useUser()
 
-async function changepassword(e: Event) {
-  console.log(e)
+//change password function
+async function changepassword(data: any) {
+  console.log(data);
+  const formData = new FormData();
+
+  // Add form fields manually to FormData
+  formData.append("password", data.password);
+  formData.append("password_confirm", data.password_confirm);
+
   await $fetch("/api/auth/change-password", {
-  	method: "POST",
-  	body: e
+    method: "POST",
+    body: formData,
   });
 }
+
+
+
 </script>
 <template>
   <div class="flex flex-col items-center justify-center bg-gray-100">
