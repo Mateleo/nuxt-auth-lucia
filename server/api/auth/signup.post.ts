@@ -27,7 +27,7 @@ export default eventHandler(async (event) => {
 
 	const email = formData.get("email");
 	const isValidEmail = typeof email === "string" && email.length <= 255 && /^.+@.+\..+$/.test(email);
-	
+
 	if (!isValidEmail) {
 		throw createError({
 			statusMessage: "Invalid email",
@@ -48,18 +48,7 @@ export default eventHandler(async (event) => {
 			statusCode: 400
 		});
 	}
-	
 
-	// It's better to check if the password has been compromised here.
-	// But UX wise it's not
-
-	const passwordHash = await hash(password, {
-		// recommended minimum parameters
-		memoryCost: 19456,
-		timeCost: 2,
-		outputLen: 32,
-		parallelism: 1
-	});
 	const existingUser = await db.user.findFirst({
 		where: {
 			username: {
@@ -73,6 +62,14 @@ export default eventHandler(async (event) => {
 			statusCode: 400
 		});
 	}
+
+	const passwordHash = await hash(password, {
+		// recommended minimum parameters
+		memoryCost: 19456,
+		timeCost: 2,
+		outputLen: 32,
+		parallelism: 1
+	});
 
 
 	// Check if the password has been compromised
